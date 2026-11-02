@@ -126,11 +126,11 @@ const materialTiers = [
 ]
 
 const estimatePrices = {
-  '1bhk': { budget: 150000, standard: 220000, premium: 320000 },
-  '2bhk': { budget: 250000, standard: 360000, premium: 520000 },
-  '3bhk': { budget: 380000, standard: 520000, premium: 750000 },
-  '4bhk': { budget: 480000, standard: 650000, premium: 950000 },
-  kitchen_only: { budget: 85000, standard: 135000, premium: 195000 },
+  '1bhk': { budget: 100000, standard: 170000, premium: 270000 },
+  '2bhk': { budget: 200000, standard: 310000, premium: 470000 },
+  '3bhk': { budget: 330000, standard: 470000, premium: 700000 },
+  '4bhk': { budget: 430000, standard: 600000, premium: 900000 },
+  kitchen_only: { budget: 35000, standard: 85000, premium: 145000 },
 }
 
 const estimatePackages = {
@@ -202,12 +202,12 @@ const serviceGroups = [
       {
         name: 'Modular kitchens',
         detail: 'Indian kitchens with tandem baskets, granite counters and chimney.',
-        image: siteAsset('service_modular_kitchen.jpeg'),
+        image: siteAsset('panorama-kitchen.jpg'),
       },
       {
         name: 'TV units',
         detail: 'Floating TV panels with concealed wiring and warm LED lighting.',
-        image: siteAsset('service_tvunit_cover.jpeg'),
+        image: siteAsset('tv-feature-wall.jpg'),
       },
       {
         name: 'Pooja rooms & units',
@@ -227,7 +227,7 @@ const serviceGroups = [
       {
         name: 'Wooden cots & beds',
         detail: 'Sturdy bed frames with hydraulic or pull-out storage.',
-        image: siteAsset('service_cots.jpg'),
+        image: siteAsset('bedroom-interior.jpg'),
       },
     ],
   },
@@ -300,23 +300,28 @@ const tours = [
     title: 'Modular kitchen',
     href: `${originalSite}/service/kitchen`,
     number: '02',
-    image: siteAsset('service_modular_kitchen.jpeg'),
+    image: siteAsset('panorama-kitchen.jpg'),
     panorama: siteAsset('panorama-kitchen.jpg'),
   },
   {
     title: 'Living room',
     href: `${originalSite}/service/living`,
     number: '03',
-    image: siteAsset('service_tvunit_cover.jpeg'),
+    image: siteAsset('tv-feature-wall.jpg'),
     panorama: siteAsset('panorama-living.jpg'),
   },
 ]
 
 const heroSlides = [
   {
-    image: siteAsset('service_modular_kitchen.jpeg'),
-    name: 'Modular kitchen',
-    alt: 'Geo Interiors modular kitchen with dark wood cabinetry and a black countertop',
+    image: siteAsset('hero-living-room.jpg'),
+    name: 'Modern living room',
+    alt: 'Modern open-plan living room with wood panelling, a dining area and warm lighting',
+  },
+  {
+    image: siteAsset('hero-living-room-detail.jpg'),
+    name: 'Living room with a TV feature wall',
+    alt: 'Warm living room with a marble-look TV feature wall and wood-slat panelling',
   },
   {
     image: siteAsset('service_wardrobe.jpg'),
@@ -324,14 +329,14 @@ const heroSlides = [
     alt: 'Warm master bedroom interior with a built-in wooden wardrobe',
   },
   {
-    image: siteAsset('service_tvunit_cover.jpeg'),
+    image: siteAsset('tv-feature-wall.jpg'),
     name: 'Living room',
     alt: 'Contemporary living room with a custom TV unit and wall panelling',
   },
   {
-    image: siteAsset('service_cots.jpg'),
-    name: 'Bedroom with a storage bed',
-    alt: 'Warm bedroom with a wooden storage bed, bedside tables and soft lighting',
+    image: siteAsset('bedroom-interior.jpg'),
+    name: 'Bedroom with a built-in TV wall',
+    alt: 'Bright bedroom with a built-in TV wall, wood panelling and a cushioned bed',
   },
   {
     image: siteAsset('service_pooja.jpg'),
@@ -368,24 +373,37 @@ const process = [
   },
 ]
 
+
 const testimonials = [
   {
     quote:
-      'Add an approved client quote about the planning process and finished details.',
-    name: 'Client name',
-    location: 'Project location',
+      'The team understood our ideas perfectly. Our new home looks beautiful, and every detail feels just right!',
+    name: 'Priya R.',
+    location: 'Coimbatore',
   },
   {
     quote:
-      'Add an approved client quote about the design, material choices and finished space.',
-    name: 'Client name',
-    location: 'Project location',
+      'Loved the attention to detail and material choices. The final interiors look beautiful and feel so comfortable!',
+    name: 'Arun K.',
+    location: 'Dharapuram',
   },
   {
     quote:
-      'Add an approved client quote about communication, timing or installation.',
-    name: 'Client name',
-    location: 'Project location',
+      'The entire experience was smooth. The team was helpful, approachable and delivered a home we truly love!',
+    name: 'Divya S.',
+    location: 'Alangiyam',
+  },
+  {
+    quote:
+      'Our living room turned out exactly how we imagined. The colours, lighting and finishing look amazing!',
+    name: 'Karthik M.',
+    location: 'Salem',
+  },
+  {
+    quote:
+      'Great ideas, thoughtful designs and practical storage. We are really happy with how our home turned out!',
+    name: 'Meena V.',
+    location: 'Coimbatore',
   },
 ]
 
@@ -912,6 +930,7 @@ function ServiceCardStack({ group }) {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [headerScrolled, setHeaderScrolled] = useState(false)
   const [activeTourIndex, setActiveTourIndex] = useState(0)
   const [homeScope, setHomeScope] = useState('2bhk')
   const [materialTier, setMaterialTier] = useState('standard')
@@ -931,6 +950,15 @@ function App() {
     currency: 'INR',
     maximumFractionDigits: 0,
   }).format(estimatePrice)
+
+  useEffect(() => {
+    const updateHeader = () => setHeaderScrolled(window.scrollY > 40)
+
+    updateHeader()
+    window.addEventListener('scroll', updateHeader, { passive: true })
+
+    return () => window.removeEventListener('scroll', updateHeader)
+  }, [])
 
   useEffect(() => {
     const contactSection = document.querySelector('.contact-section')
@@ -978,7 +1006,7 @@ function App() {
         className="scroll-progress"
         style={{ scaleX: scrollYProgress, transformOrigin: '0% 50%' }}
       />
-      <header className="site-header max-[901px]:relative max-[901px]:z-[5] max-[901px]:h-[76px] max-[901px]:px-[5%] max-[681px]:h-[70px] max-[681px]:px-[22px]">
+      <header className={`site-header max-[901px]:px-[5%] max-[681px]:px-[22px] ${headerScrolled ? 'is-scrolled' : ''}`}>
         <a className="wordmark" href="#home" aria-label="Geo Interiors home">
           <span className="wordmark-symbol" aria-hidden="true">
             g<span>.</span>
@@ -1018,7 +1046,7 @@ function App() {
         </a>
       </header>
 
-      <section className="hero-section max-[901px]:grid-cols-[minmax(0,0.87fr)_minmax(0,1.13fr)] max-[681px]:flex max-[681px]:flex-col" id="home">
+      <section className="hero-section" id="home">
         <motion.div className="hero-copy" {...revealProps(shouldReduceMotion)}>
           <p className="eyebrow"><span /> DIRECT FACTORY · SKILLED CARPENTRY</p>
           <h1 aria-label="Home interiors, built by hand.">
@@ -1030,10 +1058,40 @@ function App() {
           </h1>
           <div className="hero-actions">
             <a href="#services" className="button button-dark">
-              our services <ArrowIcon />
+              <svg className="hero-action-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M4 20V8l8-5 8 5v12h-6v-7h-4v7H4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                <path d="M8 10h.01M12 10h.01M16 10h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <span>Our Services</span>
             </a>
-            <a href={`https://wa.me/${whatsAppNumber}?text=${whatsAppMessage}`} className="text-link">
-              free estimate <ArrowIcon diagonal />
+            <a
+              href={`https://wa.me/${whatsAppNumber}?text=${whatsAppMessage}`}
+              className="button button-outline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg className="hero-action-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3v18m5-14.5c-.8-1-2.2-1.5-4-1.5-2.5 0-4 1.2-4 3s1.3 2.8 4 3.5 4 1.7 4 3.5-1.6 3-4 3c-1.9 0-3.5-.6-4.5-1.7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+              <span>Free Estimate</span>
+            </a>
+            <a
+              href={`https://wa.me/${whatsAppNumber}?text=${encodeURIComponent('Hi, I would like to book a free site visit.')}`}
+              className="button button-outline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg className="hero-action-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+              </svg>
+              <span>Free Site Visit</span>
+            </a>
+            <a href={`tel:${phone}`} className="button button-outline">
+              <svg className="hero-action-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="m7.2 3.8 3 3.8-2 2.1a14 14 0 0 0 6.1 6.1l2.1-2 3.8 3c.4.3.5.8.2 1.2l-1.5 2a2 2 0 0 1-2 .8C9.4 19.2 4.8 14.6 3.2 7.1a2 2 0 0 1 .8-2l2-1.5c.4-.3.9-.2 1.2.2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+              </svg>
+              <span>Call Now</span>
             </a>
           </div>
           <div className="hero-trust">
@@ -1080,14 +1138,14 @@ function App() {
         <motion.div className="about-copy" {...revealProps(shouldReduceMotion, { delay: 0.12 })}>
           <p>
             At Geo Interiors, we believe every family deserves a solid,
-            functional and beautiful home interior—without inflated designer
+            functional and beautiful home interior without inflated designer
             commissions.
           </p>
           <div className="values-grid">
-            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.05 })}><strong>01</strong><h3>Our own team</h3><p>No subcontracting. Skilled in-house carpenters handle the work.</p></motion.article>
-            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.1 })}><strong>02</strong><h3>Genuine materials</h3><p>BWP marine ply, Century or Greenply and Hettich hardware.</p></motion.article>
-            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.15 })}><strong>03</strong><h3>Clear estimates</h3><p>Itemized costs shared before work begins.</p></motion.article>
-            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.2 })}><strong>04</strong><h3>Timely handover</h3><p>A committed 30–45 day completion timeline.</p></motion.article>
+            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.05 })}><h3>Our own team</h3><p>No subcontracting. Skilled in-house carpenters handle the work.</p></motion.article>
+            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.1 })}><h3>Genuine materials</h3><p>BWP marine ply, Century or Greenply and Hettich hardware.</p></motion.article>
+            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.15 })}><h3>Clear estimates</h3><p>Itemized costs shared before work begins.</p></motion.article>
+            <motion.article {...revealProps(shouldReduceMotion, { delay: 0.2 })}><h3>Timely handover</h3><p>A committed 30–45 day completion timeline.</p></motion.article>
           </div>
         </motion.div>
       </section>
@@ -1128,7 +1186,6 @@ function App() {
               {...revealProps(shouldReduceMotion, { delay: groupIndex * 0.08 })}
             >
               <motion.div className="service-group-heading" {...revealProps(shouldReduceMotion, { delay: groupIndex * 0.08 })}>
-                <span>0{groupIndex + 1}</span>
                 <div>
                   <h3><TypingText text={group.title} direction={groupIndex % 2 ? 'right' : 'left'} shouldReduceMotion={shouldReduceMotion} /></h3>
                   <p>{group.description}</p>
@@ -1221,7 +1278,6 @@ function App() {
               whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
               {...revealProps(shouldReduceMotion, { delay: index * 0.075 })}
             >
-              <span>{String(index + 1).padStart(2, '0')}</span>
               <h3>{step.title}</h3>
               <p>{step.detail}</p>
             </motion.article>
@@ -1250,7 +1306,7 @@ function App() {
                     alt=""
                   />
                   <div className="testimonial-content">
-                    <blockquote className="testimonial-quote">“{testimonial.quote}”</blockquote>
+                    <blockquote className="testimonial-quote">{testimonial.quote}</blockquote>
                     <p className="testimonial-attribution">
                       <strong>{testimonial.name}</strong>
                       <span>{testimonial.location}</span>

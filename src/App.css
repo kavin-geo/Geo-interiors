@@ -1,4 +1,9 @@
 @layer components {
+:root {
+  --section-space: clamp(28px, 2.2vw, 32px);
+  --section-content-gap: 28px;
+}
+
 #root {
   min-height: 100vh;
 }
@@ -21,19 +26,42 @@ main {
 
 .site-header {
   align-items: center;
-  background: var(--paper);
+  background: transparent;
   display: flex;
-  height: 88px;
   justify-content: space-between;
-  padding: 0 7.1%;
+  left: 0;
+  padding: 18px 7.1%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: background-color 200ms ease, box-shadow 200ms ease, padding 200ms ease;
+  z-index: 5;
+}
+
+.site-header.is-scrolled {
+  background: rgb(248 247 243 / 96%);
+  box-shadow: 0 4px 18px rgb(39 44 37 / 12%);
+  padding-bottom: 14px;
+  padding-top: 14px;
+  position: fixed;
 }
 
 .wordmark {
   align-items: center;
-  color: var(--ink);
+  color: #fff;
   display: inline-flex;
   gap: 9px;
   text-decoration: none;
+}
+
+.site-header.is-scrolled .wordmark,
+.site-header.is-scrolled .main-nav a,
+.site-header.is-scrolled .header-cta {
+  color: var(--ink);
+}
+
+.site-header.is-scrolled .menu-toggle span {
+  background: var(--ink);
 }
 
 .wordmark-symbol {
@@ -78,7 +106,7 @@ main {
 }
 
 .menu-toggle span {
-  background: var(--ink);
+  background: #fff;
   display: block;
   height: 1px;
   margin: 5px 0;
@@ -96,7 +124,7 @@ main {
 
 .main-nav a,
 .header-cta {
-  color: var(--ink);
+  color: #fff;
   font-size: 12px;
   text-decoration: none;
 }
@@ -134,17 +162,20 @@ main {
 
 .hero-section {
   align-items: center;
-  background: var(--paper);
+  background: var(--ink);
   display: grid;
-  gap: 4.8%;
-  grid-template-columns: minmax(340px, 0.83fr) minmax(470px, 1.17fr);
-  min-height: min(690px, calc(100svh - 88px));
-  padding: 54px 7.1% 98px;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 142px 7.1% 94px;
   position: relative;
 }
 
 .hero-copy {
+  max-width: 650px;
   padding-bottom: 10px;
+  position: relative;
+  z-index: 2;
 }
 
 .eyebrow {
@@ -158,6 +189,10 @@ main {
   margin: 0;
 }
 
+.hero-copy .eyebrow {
+  color: rgb(255 255 255 / 92%);
+}
+
 .eyebrow > span {
   background: var(--clay);
   border-radius: 50%;
@@ -167,7 +202,7 @@ main {
 }
 
 .hero-copy h1 {
-  color: var(--ink);
+  color: #fff;
   font-family: var(--serif);
   font-size: clamp(52px, 5.8vw, 82px);
   font-weight: 400;
@@ -180,6 +215,10 @@ main {
 .contact-section h2 em {
   color: var(--clay);
   font-weight: 400;
+}
+
+.hero-copy h1 > span {
+  color: #e8b59f;
 }
 
 .typing-text {
@@ -203,11 +242,45 @@ main {
 }
 
 .hero-actions {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  margin-top: 29px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 30px;
+  max-width: 490px;
+}
+
+.hero-actions > .button {
+  border-color: rgb(255 255 255 / 55%);
+  color: #fff;
+  gap: 9px;
+  justify-content: flex-start;
+  min-height: 54px;
+  padding: 0 17px;
+}
+
+.hero-actions > .button > span {
+  flex: 1;
+  text-align: left;
+}
+
+.hero-actions > .button > .hero-action-icon {
+  flex: 0 0 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.hero-actions > .button-dark {
+  background: var(--clay);
+  border-color: var(--clay);
+}
+
+.hero-actions > .button-dark:hover {
+  background: #9e604c;
+}
+
+.hero-actions > .button-outline:hover {
+  background: #fff;
+  color: var(--ink);
 }
 
 .button {
@@ -266,12 +339,23 @@ main {
 }
 
 .hero-visual {
-  margin-top: 5px;
-  position: relative;
+  inset: 0;
+  position: absolute;
+  z-index: 0;
+}
+
+.hero-visual::after {
+  background:
+    linear-gradient(90deg, rgb(20 24 20 / 82%) 0%, rgb(20 24 20 / 64%) 42%, rgb(20 24 20 / 15%) 100%),
+    linear-gradient(0deg, rgb(20 24 20 / 32%), transparent 42%);
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
 }
 
 .hero-image-carousel {
-  aspect-ratio: 1.12;
+  height: 100%;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -288,16 +372,18 @@ main {
 
 .hero-tour-link {
   align-items: center;
-  background: var(--paper);
+  background: rgb(20 24 20 / 68%);
+  backdrop-filter: blur(8px);
   bottom: 22px;
-  color: var(--ink);
+  color: #fff;
   display: flex;
   gap: 13px;
-  left: 22px;
+  right: 7.1%;
   padding: 14px 18px 14px 14px;
   position: absolute;
   text-decoration: none;
   transition: transform 180ms ease;
+  z-index: 1;
 }
 
 .hero-tour-link:hover {
@@ -333,13 +419,13 @@ main {
 }
 
 .hero-tour-link small {
-  color: var(--muted);
+  color: rgb(255 255 255 / 72%);
   font-size: 9px;
   margin-top: 3px;
 }
 
 .hero-trust {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgb(255 255 255 / 30%);
   display: flex;
   flex-wrap: wrap;
   gap: 9px 17px;
@@ -348,7 +434,7 @@ main {
 }
 
 .hero-trust span {
-  color: var(--moss);
+  color: rgb(255 255 255 / 86%);
   font-size: 9px;
 }
 
@@ -361,7 +447,7 @@ main {
 .scroll-cue {
   align-items: center;
   bottom: 28px;
-  color: var(--muted);
+  color: rgb(255 255 255 / 75%);
   display: flex;
   font-size: 8px;
   gap: 12px;
@@ -369,6 +455,7 @@ main {
   letter-spacing: 0.16em;
   position: absolute;
   text-decoration: none;
+  z-index: 2;
 }
 
 .scroll-line {
@@ -404,8 +491,7 @@ main {
   display: grid;
   gap: 9%;
   grid-template-columns: 0.8fr 1.2fr;
-  padding-bottom: 100px;
-  padding-top: 104px;
+  padding-block: var(--section-space);
 }
 
 .about-heading h2,
@@ -416,7 +502,7 @@ main {
   font-weight: 400;
   letter-spacing: -0.045em;
   line-height: 1.06;
-  margin: 20px 0 0;
+  margin: 18px 0 0;
 }
 
 .team-photo {
@@ -453,6 +539,7 @@ main {
 .values-grid article > strong {
   color: var(--clay);
   font-size: 9px;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .values-grid h3 {
@@ -472,7 +559,7 @@ main {
 
 .tour-section {
   background: #efeee8;
-  padding: 96px 0 93px;
+  padding-block: var(--section-space);
 }
 
 .tour-section .section-heading {
@@ -690,7 +777,6 @@ main {
 .service-group-heading {
   align-items: start;
   border-top: 1px solid var(--line);
-  display: grid;
   gap: 15px;
   grid-template-columns: 35px 1fr;
   padding: 19px 0;
@@ -970,7 +1056,7 @@ main {
 .estimate-section {
   background: var(--moss);
   color: white;
-  padding: 96px 0;
+  padding-block: var(--section-space);
 }
 
 .estimate-inner {
@@ -986,8 +1072,8 @@ main {
 
 .estimate-inner h2 {
   color: #fff;
-  font-size: clamp(42px, 4.3vw, 58px);
-  margin: 24px 0 18px;
+  font-size: clamp(39px, 4vw, 54px);
+  margin: 18px 0;
 }
 
 .estimate-copy,
@@ -1145,20 +1231,19 @@ main {
 }
 
 .process-section {
-  padding-bottom: 102px;
-  padding-top: 99px;
+  padding-block: var(--section-space);
 }
 
 .testimonial-section {
   overflow: hidden;
-  padding-bottom: 28px;
+  padding-block: var(--section-space);
 }
 
 .testimonial-heading {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 22px;
+  margin-bottom: var(--section-content-gap);
 }
 
 .testimonial-note {
@@ -1246,6 +1331,11 @@ main {
   font-weight: 600;
 }
 
+.service-stack-count,
+.process-card > span {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
 @keyframes testimonial-marquee {
   to {
     transform: translateX(0);
@@ -1257,8 +1347,7 @@ main {
 }
 
 .faq-section {
-  padding-bottom: 94px;
-  padding-top: 28px;
+  padding-block: var(--section-space);
 }
 
 .faq-list {
@@ -1332,7 +1421,7 @@ main {
   border: 1px solid var(--line);
   border-radius: 6px;
   box-shadow: 0 0 0 rgb(39 44 37 / 0%);
-  min-height: 176px;
+  min-height: 156px;
   padding: 18px;
   transition: border-color 220ms ease, box-shadow 220ms ease;
 }
@@ -1371,15 +1460,14 @@ main {
 }
 
 .work-section {
-  padding-bottom: 105px;
-  padding-top: 108px;
+  padding-block: var(--section-space);
 }
 
 .section-heading {
   align-items: end;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 36px;
+  margin-bottom: var(--section-content-gap);
 }
 
 .section-heading h2,
@@ -1402,7 +1490,7 @@ main {
   background: var(--sand);
   display: flex;
   flex-direction: column;
-  padding: 100px 8% 0;
+  padding: var(--section-space) 8% 0;
   text-align: center;
 }
 
@@ -1631,7 +1719,7 @@ main {
   flex-direction: column;
   gap: 12px;
   position: fixed;
-  right: max(20px, env(safe-area-inset-right));
+  right: max(12px, env(safe-area-inset-right));
   z-index: 20;
 }
 
@@ -1735,13 +1823,16 @@ html.contact-in-view .social-floaters {
 
 @media (max-width: 900px) {
   .hero-section {
-    gap: 4%;
-    min-height: auto;
-    padding: 55px 5% 90px;
+    min-height: 100svh;
+    padding: 132px 6% 88px;
   }
 
   .hero-copy h1 {
     font-size: clamp(48px, 7.3vw, 65px);
+  }
+
+  .hero-tour-link {
+    right: 6%;
   }
 
   .section-wrap {
@@ -1762,6 +1853,7 @@ html.contact-in-view .social-floaters {
 @media (max-width: 901px) {
   .main-nav a {
     border-bottom: 1px solid var(--line);
+    color: var(--ink);
     padding: 12px 0;
   }
 
@@ -1771,6 +1863,11 @@ html.contact-in-view .social-floaters {
 }
 
 @media (max-width: 680px) {
+  :root {
+    --section-space: 24px;
+    --section-content-gap: 20px;
+  }
+
   .wordmark-symbol {
     font-size: 38px;
   }
@@ -1779,18 +1876,35 @@ html.contact-in-view .social-floaters {
     font-size: 11px;
   }
 
+  .social-floaters {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    gap: 9px;
+  }
+
+  .whatsapp-float,
+  .instagram-float {
+    height: 50px;
+    width: 50px;
+  }
+
+  .whatsapp-float svg,
+  .instagram-float svg {
+    height: 24px;
+    width: 24px;
+  }
+
   .hero-section {
-    gap: 37px;
-    padding: 54px 22px 85px;
+    min-height: 100svh;
+    padding: 116px 22px 76px;
   }
 
   .hero-copy {
-    align-self: stretch;
+    align-self: center;
   }
 
   .hero-copy h1 {
-    font-size: clamp(55px, 13vw, 72px);
-    margin: 23px 0 18px;
+    font-size: clamp(43px, 11vw, 62px);
+    margin: 22px 0 18px;
   }
 
   .hero-description {
@@ -1799,52 +1913,26 @@ html.contact-in-view .social-floaters {
   }
 
   .hero-actions {
-    align-items: stretch;
-    display: grid;
     gap: 8px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-top: 23px;
-  }
-
-  .hero-actions > .button,
-  .hero-actions > .text-link {
-    gap: 5px;
-    justify-content: center;
-    min-width: 0;
-    padding: 0 7px;
-    text-align: center;
-    white-space: nowrap;
+    margin-top: 24px;
   }
 
   .hero-actions > .button {
     font-size: 10px;
+    gap: 6px;
+    min-height: 48px;
+    padding: 0 9px;
   }
 
-  .hero-actions > .button svg,
-  .hero-actions > .text-link svg {
-    flex: 0 0 14px;
-    height: 14px;
-    width: 14px;
-  }
-
-  .hero-actions > .text-link {
-    border: 1px solid rgb(39 44 37 / 30%);
-    font-size: 10px;
-    min-height: 47px;
-  }
-
-  .hero-visual {
-    align-self: stretch;
-    margin: 0;
-  }
-
-  .hero-image-carousel {
-    aspect-ratio: 1 / 1;
+  .hero-actions > .button > .hero-action-icon {
+    flex-basis: 17px;
+    height: 17px;
+    width: 17px;
   }
 
   .hero-tour-link {
-    bottom: 12px;
-    left: 12px;
+    bottom: 14px;
+    right: 22px;
     padding: 10px 13px 10px 10px;
   }
 
@@ -1867,8 +1955,6 @@ html.contact-in-view .social-floaters {
 
   .about-section {
     gap: 25px;
-    padding-bottom: 67px;
-    padding-top: 68px;
   }
 
   .about-heading h2,
@@ -1881,7 +1967,7 @@ html.contact-in-view .social-floaters {
   }
 
   .tour-section {
-    padding: 70px 0;
+    padding-block: var(--section-space);
   }
 
   .tour-section .section-heading {
@@ -1950,8 +2036,7 @@ html.contact-in-view .social-floaters {
   }
 
   .work-section {
-    padding-bottom: 70px;
-    padding-top: 75px;
+    padding-block: var(--section-space);
   }
 
   .service-groups {
@@ -1978,7 +2063,7 @@ html.contact-in-view .social-floaters {
   }
 
   .estimate-section {
-    padding: 70px 0;
+    padding-block: var(--section-space);
   }
 
   .estimate-inner {
@@ -1994,19 +2079,17 @@ html.contact-in-view .social-floaters {
   }
 
   .faq-section {
-    padding-bottom: 70px;
-    padding-top: 12px;
+    padding-block: var(--section-space);
   }
 
   .testimonial-section {
-    padding-bottom: 12px;
+    padding-block: var(--section-space);
   }
 
   .testimonial-heading {
     align-items: flex-start;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 17px;
   }
 
   .testimonial-card {
@@ -2034,8 +2117,7 @@ html.contact-in-view .social-floaters {
   }
 
   .process-section {
-    padding-bottom: 68px;
-    padding-top: 70px;
+    padding-block: var(--section-space);
   }
 
   .process-card {
@@ -2049,7 +2131,7 @@ html.contact-in-view .social-floaters {
 
   .section-heading {
     gap: 16px;
-    margin-bottom: 25px;
+    margin-bottom: var(--section-content-gap);
   }
 
   .section-heading h2 {
@@ -2057,7 +2139,7 @@ html.contact-in-view .social-floaters {
   }
 
   .contact-section {
-    padding: 75px 22px 0;
+    padding: var(--section-space) 22px 0;
   }
 
   .contact-form {
@@ -2158,26 +2240,24 @@ html.contact-in-view .social-floaters {
     }
 
     .hero-copy h1 {
-      font-size: 51px;
+      font-size: 43px;
     }
 
     .hero-actions {
       gap: 7px;
     }
 
-    .hero-actions > .button,
-    .hero-actions > .text-link {
+    .hero-actions > .button {
       font-size: 9px;
-      gap: 3px;
+      gap: 4px;
       padding-left: 4px;
       padding-right: 4px;
     }
 
-    .hero-actions > .button svg,
-    .hero-actions > .text-link svg {
-      flex-basis: 12px;
-      height: 12px;
-      width: 12px;
+    .hero-actions > .button > .hero-action-icon {
+      flex-basis: 15px;
+      height: 15px;
+      width: 15px;
     }
 
     .section-wrap {
@@ -2192,6 +2272,19 @@ html.contact-in-view .social-floaters {
     .contact-section {
       padding-left: 16px;
       padding-right: 16px;
+    }
+
+    .contact-section .contact-actions .button {
+      font-size: 9px;
+      gap: 3px;
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+
+    .contact-section .contact-actions .button svg {
+      flex-basis: 12px;
+      height: 12px;
+      width: 12px;
     }
   }
 
