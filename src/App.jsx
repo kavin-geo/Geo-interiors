@@ -202,7 +202,7 @@ const serviceGroups = [
       {
         name: 'Modular kitchens',
         detail: 'Indian kitchens with tandem baskets, granite counters and chimney.',
-        image: siteAsset('panorama-kitchen.jpg'),
+        image: siteAsset('modular-kitchen-yellow.jpg'),
       },
       {
         name: 'TV units',
@@ -975,6 +975,30 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    const contentSections = document.querySelectorAll('.about-section, .tour-section')
+    if (!contentSections.length || !('IntersectionObserver' in window)) return undefined
+
+    const visibleSections = new Set()
+    const contentObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleSections.add(entry.target)
+        } else {
+          visibleSections.delete(entry.target)
+        }
+      })
+      document.documentElement.classList.toggle('social-content-in-view', visibleSections.size > 0)
+    }, { threshold: 0.01 })
+
+    contentSections.forEach((section) => contentObserver.observe(section))
+
+    return () => {
+      contentObserver.disconnect()
+      document.documentElement.classList.remove('social-content-in-view')
+    }
+  }, [])
+
   const closeMenu = () => setMenuOpen(false)
 
   const handleContactSubmit = (event) => {
@@ -1129,7 +1153,7 @@ function App() {
           </h2>
           <motion.img
             className="team-photo"
-            src={siteAsset('about_team_work.jpg')}
+            src={siteAsset('about-team-installation.png')}
             alt="Geo Interiors carpentry and fitting team at work"
             loading="lazy"
             {...revealProps(shouldReduceMotion, { image: true })}

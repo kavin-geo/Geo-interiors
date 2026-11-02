@@ -1776,6 +1776,14 @@ html.contact-in-view .social-floaters {
   visibility: hidden;
 }
 
+@media (max-width: 680px) {
+  html.social-content-in-view .social-floaters {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
 .sr-only {
   clip: rect(0, 0, 0, 0);
   clip-path: inset(50%);
@@ -1827,12 +1835,18 @@ html.contact-in-view .social-floaters {
     padding: 132px 6% 88px;
   }
 
+  .hero-tour-link {
+    left: 6%;
+    max-width: calc(100% - 120px);
+    right: auto;
+  }
+
   .hero-copy h1 {
     font-size: clamp(48px, 7.3vw, 65px);
   }
 
-  .hero-tour-link {
-    right: 6%;
+  .scroll-cue {
+    display: none;
   }
 
   .section-wrap {
@@ -1932,7 +1946,9 @@ html.contact-in-view .social-floaters {
 
   .hero-tour-link {
     bottom: 14px;
-    right: 22px;
+    left: 22px;
+    max-width: calc(100% - 90px);
+    right: auto;
     padding: 10px 13px 10px 10px;
   }
 
@@ -1945,8 +1961,7 @@ html.contact-in-view .social-floaters {
   }
 
   .scroll-cue {
-    bottom: 26px;
-    left: 22px;
+    display: none;
   }
 
   .intro-emphasis {
@@ -1955,6 +1970,7 @@ html.contact-in-view .social-floaters {
 
   .about-section {
     gap: 25px;
+    padding-bottom: 40px;
   }
 
   .about-heading h2,
@@ -1963,7 +1979,8 @@ html.contact-in-view .social-floaters {
   }
 
   .values-grid {
-    gap: 20px 18px;
+    gap: 16px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .tour-section {
