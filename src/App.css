@@ -1908,6 +1908,9 @@ html.contact-in-view .social-floaters {
   }
 
   .hero-section {
+    height: 100vh;
+    height: 100svh;
+    min-height: 100vh;
     min-height: 100svh;
     padding: 116px 22px 76px;
   }
@@ -1945,15 +1948,7 @@ html.contact-in-view .social-floaters {
   }
 
   .hero-tour-link {
-    bottom: 14px;
-    left: 22px;
-    max-width: calc(100% - 90px);
-    right: auto;
-    padding: 10px 13px 10px 10px;
-  }
-
-  .hero-tour-link strong {
-    font-size: 13px;
+    display: none;
   }
 
   .hero-trust {
@@ -1969,8 +1964,15 @@ html.contact-in-view .social-floaters {
   }
 
   .about-section {
+    display: flex;
+    flex-direction: column;
     gap: 25px;
     padding-bottom: 40px;
+  }
+
+  .about-heading,
+  .about-copy {
+    min-width: 0;
   }
 
   .about-heading h2,
@@ -1981,6 +1983,11 @@ html.contact-in-view .social-floaters {
   .values-grid {
     gap: 16px;
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .values-grid article {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .tour-section {
