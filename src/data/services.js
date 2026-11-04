@@ -135,6 +135,7 @@ export const serviceGroups = [
         name: 'uPVC windows',
         section: 'fittings',
         slug: 'upvc-windows',
+        stockPrefix: 'upvc-window',
         projectImage: 'service_pvc_windows.jpeg',
         projectAlt: 'uPVC windows fitted with glass and mosquito mesh',
         inspirationAlts: [
@@ -148,6 +149,7 @@ export const serviceGroups = [
         name: 'Steel doors',
         section: 'fittings',
         slug: 'steel-doors',
+        stockPrefix: 'steel-door',
         projectImage: 'service_steel_doors.jpeg',
         projectAlt: 'Steel entrance door with a secure multi-point lock',
         inspirationAlts: [
@@ -161,6 +163,7 @@ export const serviceGroups = [
         name: 'Aluminium partitions',
         section: 'fittings',
         slug: 'aluminium-partitions',
+        stockPrefix: 'aluminium-partition',
         projectImage: 'service_aluminium.jpeg',
         projectAlt: 'Aluminium-framed glass partition in a modern interior',
         inspirationAlts: [
@@ -174,6 +177,7 @@ export const serviceGroups = [
         name: 'Bathroom doors',
         section: 'fittings',
         slug: 'bathroom-doors',
+        stockPrefix: 'bathroom-door',
         projectImage: 'service_bathroom.jpg',
         projectAlt: 'Water-resistant bathroom door for a wet area',
         inspirationAlts: [
@@ -200,6 +204,7 @@ export const serviceGroups = [
         name: 'Window screens',
         section: 'fittings',
         slug: 'window-screens',
+        stockPrefix: 'window-screen',
         projectImage: 'service_screens.jpeg',
         projectAlt: 'Window screen fitted to keep insects outside',
         inspirationAlts: [
@@ -213,6 +218,7 @@ export const serviceGroups = [
         name: 'Glass partitions',
         section: 'fittings',
         slug: 'glass-partitions',
+        stockPrefix: 'glass-partition',
         projectImage: 'service_glass.jpeg',
         projectAlt: 'Toughened glass partition in a modern room',
         inspirationAlts: [
@@ -226,6 +232,7 @@ export const serviceGroups = [
         name: 'SS railings',
         section: 'fittings',
         slug: 'ss-railings',
+        stockPrefix: 'ss-railing',
         projectImage: 'service_ss.jpeg',
         projectAlt: 'Stainless steel railing on a staircase',
         inspirationAlts: [
@@ -239,6 +246,7 @@ export const serviceGroups = [
         name: 'SS handrails',
         section: 'fittings',
         slug: 'ss-handrails',
+        stockPrefix: 'ss-handrail',
         projectImage: 'service_ss_1.jpeg',
         projectAlt: 'Stainless steel safety handrail fitted beside steps',
         inspirationAlts: [
