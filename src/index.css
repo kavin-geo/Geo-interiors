@@ -1,18 +1,19 @@
 @layer theme, base, components, utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Petrona:ital,wght@0,400;0,500;1,400&display=swap');
 @import "tailwindcss";
 
 :root {
-  --paper: #f8f7f3;
-  --sand: #eeece4;
-  --ink: #272c25;
-  --moss: #465847;
-  --clay: #b8735b;
-  --muted: #77786f;
-  --line: #deddd5;
-  --sans: 'DM Sans', sans-serif;
-  --serif: 'Playfair Display', Georgia, serif;
+  --paper: #f2efe7;
+  --sand: #e8e3d8;
+  --ink: #16150f;
+  --moss: #3e3b31;
+  --clay: #ffbd00;
+  --clay-hover: #d6a500;
+  --muted: #5c594c;
+  --line: #d8d2c0;
+  --sans: 'Inter', Calibri, system-ui, sans-serif;
+  --serif: 'Petrona', Cambria, Georgia, serif;
 
   background: var(--paper);
   color: var(--ink);
@@ -47,6 +48,6 @@ input {
 }
 
 ::selection {
-  background: #d5b3a4;
+  background: var(--clay);
   color: var(--ink);
 }

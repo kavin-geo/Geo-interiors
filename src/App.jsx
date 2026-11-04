@@ -781,9 +781,9 @@ function App() {
           <a href="#process" onClick={closeMenu}>Our process</a>
           <a href="#contact" onClick={closeMenu}>Contact</a>
         </nav>
-        <a className="header-cta" href={`tel:${phone}`}>
+        <a className="header-cta" href={`tel:${phone}`} aria-label="Call us">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-            <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.56 3.58.56a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.19 2.46.56 3.58a1 1 0 0 1-.25 1.02l-2.2 2.2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d="M7.2 3.8 10.1 7.5 8.3 9.4a14.5 14.5 0 0 0 6.3 6.3l1.9-1.8 3.7 2.9c.4.3.5.8.2 1.2l-1.4 1.9a2 2 0 0 1-2 .8C10 19.2 4.8 14 3.3 7a2 2 0 0 1 .8-2l1.9-1.4c.4-.3.9-.2 1.2.2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
           </svg>
         </a>
       </header>
@@ -1008,30 +1008,33 @@ function App() {
           {...revealProps(shouldReduceMotion)}
         >
           <div className="testimonial-track">
-            {[...testimonials, ...testimonials].map((testimonial, index) => {
-              const isDuplicate = index >= testimonials.length
-
-              return (
-                <article
-                  className="testimonial-card"
-                  key={`${testimonial.name}-${testimonial.location}-${index}`}
-                  aria-hidden={isDuplicate}
-                >
-                  <img
-                    className="testimonial-avatar"
-                    src={siteAsset('testimonial-avatar-placeholder.svg')}
-                    alt=""
-                  />
-                  <div className="testimonial-content">
-                    <blockquote className="testimonial-quote">{testimonial.quote}</blockquote>
-                    <p className="testimonial-attribution">
-                      <strong>{testimonial.name}</strong>
-                      <span>{testimonial.location}</span>
-                    </p>
-                  </div>
-                </article>
-              )
-            })}
+            {[false, true].map((isDuplicate) => (
+              <div
+                className="testimonial-group"
+                key={isDuplicate ? 'duplicate' : 'original'}
+                aria-hidden={isDuplicate}
+              >
+                {testimonials.map((testimonial) => (
+                  <article
+                    className="testimonial-card"
+                    key={`${testimonial.name}-${testimonial.location}`}
+                  >
+                    <img
+                      className="testimonial-avatar"
+                      src={siteAsset('testimonial-avatar-placeholder.svg')}
+                      alt=""
+                    />
+                    <div className="testimonial-content">
+                      <blockquote className="testimonial-quote">{testimonial.quote}</blockquote>
+                      <p className="testimonial-attribution">
+                        <strong>{testimonial.name}</strong>
+                        <span>{testimonial.location}</span>
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ))}
           </div>
         </motion.div>
       </section>
