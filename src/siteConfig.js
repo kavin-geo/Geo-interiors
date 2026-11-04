@@ -1,7 +1,6 @@
 const siteConfig = {
   contact: {
     phone: '+919787522466',
-    email: 'info@geointeriors.com',
     whatsappMessage:
       'Hello Geo Interiors! I visited your website and would like to enquire about home interior design services.',
   },
