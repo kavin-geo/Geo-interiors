@@ -370,60 +370,6 @@ main {
   width: 100%;
 }
 
-.hero-tour-link {
-  align-items: center;
-  background: rgb(20 24 20 / 68%);
-  backdrop-filter: blur(8px);
-  bottom: 22px;
-  color: #fff;
-  display: flex;
-  gap: 13px;
-  right: 7.1%;
-  padding: 14px 18px 14px 14px;
-  position: absolute;
-  text-decoration: none;
-  transition: transform 180ms ease;
-  z-index: 1;
-}
-
-.hero-tour-link:hover {
-  transform: translateY(-3px);
-}
-
-.hero-tour-link:focus-visible {
-  outline: 2px solid var(--clay);
-  outline-offset: 3px;
-}
-
-.tour-play {
-  align-items: center;
-  background: var(--moss);
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  font-size: 18px;
-  height: 37px;
-  justify-content: center;
-  width: 37px;
-}
-
-.hero-tour-link strong,
-.hero-tour-link small {
-  display: block;
-}
-
-.hero-tour-link strong {
-  font-family: var(--serif);
-  font-size: 15px;
-  font-weight: 400;
-}
-
-.hero-tour-link small {
-  color: rgb(255 255 255 / 72%);
-  font-size: 9px;
-  margin-top: 3px;
-}
-
 .hero-trust {
   border-top: 1px solid rgb(255 255 255 / 30%);
   display: flex;
@@ -555,214 +501,6 @@ main {
   font-size: 10px;
   line-height: 1.65;
   margin: 0;
-}
-
-.tour-section {
-  background: #efeee8;
-  padding-block: var(--section-space);
-}
-
-.tour-section .section-heading {
-  align-items: center;
-}
-
-.section-description {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-  margin: 12px 0 0;
-  max-width: 500px;
-}
-
-.tour-orbit {
-  align-items: center;
-  border: 1px solid rgb(70 88 71 / 25%);
-  border-radius: 50%;
-  color: var(--moss);
-  display: flex;
-  font-family: var(--serif);
-  font-size: 25px;
-  height: 83px;
-  justify-content: center;
-  position: relative;
-  width: 83px;
-}
-
-.tour-orbit::before,
-.tour-orbit::after {
-  border: 1px solid rgb(70 88 71 / 18%);
-  border-radius: 50%;
-  content: '';
-  inset: 8px;
-  position: absolute;
-}
-
-.tour-orbit::after {
-  border-color: var(--clay);
-  border-width: 4px 0 0;
-  inset: -4px;
-  transform: rotate(-40deg);
-}
-
-.panorama-viewer {
-  background: #20251f;
-  border: 1px solid rgb(35 48 37 / 16%);
-  border-radius: 6px;
-  box-shadow: 0 18px 44px rgb(39 44 37 / 10%);
-  margin-bottom: 24px;
-  overflow: hidden;
-  padding: clamp(14px, 2vw, 24px);
-}
-
-.panorama-viewer-heading {
-  align-items: end;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  padding: 1px 1px 16px;
-}
-
-.panorama-viewer-heading > div > span {
-  color: #d1b17a;
-  font-size: 8px;
-  letter-spacing: 0.14em;
-}
-
-.panorama-viewer-heading h3 {
-  font-family: var(--serif);
-  font-size: 24px;
-  font-weight: 400;
-  margin: 5px 0 0;
-  text-transform: capitalize;
-}
-
-.panorama-viewer-heading > div > p {
-  color: #c5c8bd;
-  font-size: 10px;
-  margin: 4px 0 0;
-}
-
-.panorama-viewer-heading > p {
-  color: #c5c8bd;
-  font-size: 9px;
-}
-
-.panorama-stage {
-  background: #151814;
-  aspect-ratio: 1.72;
-  min-height: 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.panorama-loading-image {
-  height: 100%;
-  inset: 0;
-  object-fit: cover;
-  opacity: 1;
-  position: absolute;
-  transition: opacity 400ms ease;
-  width: 100%;
-  z-index: 2;
-}
-
-.panorama-stage.is-loaded .panorama-loading-image {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.panorama-loading-label {
-  background: rgb(21 24 20 / 72%);
-  color: #fff;
-  font-size: 11px;
-  left: 50%;
-  padding: 10px 14px;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-}
-
-.panorama-canvas-mount {
-  height: 100%;
-  position: relative;
-  width: 100%;
-  z-index: 1;
-}
-
-.panorama-canvas {
-  cursor: grab;
-  display: block;
-  height: 100%;
-  touch-action: none;
-  width: 100%;
-}
-
-.panorama-canvas:active {
-  cursor: grabbing;
-}
-
-.panorama-error {
-  background: rgb(32 37 31 / 94%);
-  color: #fff;
-  font-size: 12px;
-  left: 50%;
-  max-width: 80%;
-  padding: 15px 19px;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 6;
-}
-
-.tour-experience {
-  margin: 0 auto;
-  max-width: 1060px;
-}
-
-.panorama-room-picker {
-  display: grid;
-  gap: 9px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 10px;
-}
-
-.panorama-room-option {
-  align-items: center;
-  background: rgb(255 255 255 / 5%);
-  border: 1px solid rgb(255 255 255 / 17%);
-  color: #f8f7f3;
-  cursor: pointer;
-  display: flex;
-  gap: 10px;
-  min-width: 0;
-  padding: 6px;
-  text-align: left;
-  transition: background 180ms ease, border-color 180ms ease;
-}
-
-.panorama-room-option:hover,
-.panorama-room-option.is-selected {
-  background: rgb(255 255 255 / 11%);
-  border-color: #d1b17a;
-}
-
-.panorama-room-option:focus-visible {
-  outline: 2px solid #d1b17a;
-  outline-offset: 2px;
-}
-
-.panorama-room-option img {
-  aspect-ratio: 1.45;
-  flex: 0 0 72px;
-  object-fit: cover;
-  width: 72px;
-}
-
-.panorama-room-option span {
-  font-family: var(--serif);
-  font-size: 14px;
-  line-height: 1.25;
 }
 
 .service-groups {
@@ -1814,9 +1552,7 @@ html.contact-in-view .social-floaters {
 }
 
 @media (max-width: 900px) {
-  .panorama-stage {
-    aspect-ratio: 1.72;
-  }
+
 
   .estimate-inner {
     gap: 34px;
@@ -1835,11 +1571,7 @@ html.contact-in-view .social-floaters {
     padding: 132px 6% 88px;
   }
 
-  .hero-tour-link {
-    left: 6%;
-    max-width: calc(100% - 120px);
-    right: auto;
-  }
+
 
   .hero-copy h1 {
     font-size: clamp(48px, 7.3vw, 65px);
@@ -1947,9 +1679,7 @@ html.contact-in-view .social-floaters {
     width: 17px;
   }
 
-  .hero-tour-link {
-    display: none;
-  }
+
 
   .hero-trust {
     gap: 9px 14px;
@@ -1990,69 +1720,29 @@ html.contact-in-view .social-floaters {
     overflow-wrap: anywhere;
   }
 
-  .tour-section {
-    padding-block: var(--section-space);
-  }
 
-  .tour-section .section-heading {
-    align-items: flex-start;
-    flex-direction: row;
-  }
 
-  .panorama-viewer {
-    padding: 13px;
-  }
 
-  .panorama-viewer-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 7px;
-  }
 
-  .panorama-viewer-heading h3 {
-    font-size: 21px;
-  }
 
-  .panorama-viewer-heading > p {
-    margin: 0;
-  }
 
-  .panorama-stage {
-    aspect-ratio: auto;
-    height: 62vw;
-    min-height: 265px;
-  }
 
-  .panorama-room-picker {
-    gap: 6px;
-  }
 
-  .panorama-room-option {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 4px;
-    padding: 4px;
-  }
 
-  .panorama-room-option img {
-    aspect-ratio: auto;
-    flex: 0 0 auto;
-    height: 54px;
-    width: 100%;
-  }
 
-  .panorama-room-option span {
-    font-size: 11px;
-    min-height: 28px;
-    text-align: center;
-  }
 
-  .tour-orbit {
-    flex: 0 0 65px;
-    font-size: 19px;
-    height: 65px;
-    width: 65px;
-  }
+
+
+
+
+
+
+
+
+
+
+
+
 
   .section-wrap {
     padding-left: 22px;

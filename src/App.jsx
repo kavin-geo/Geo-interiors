@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useReducedMotion, useScroll } from 'motion/rea
 import siteConfig from './siteConfig'
 import './App.css'
 
-const originalSite = 'https://geointeriors-rose.vercel.app'
 const siteAsset = (filename) => `${import.meta.env.BASE_URL}images/geo/${filename}`
 const phone = siteConfig.contact.phone
 const phoneDigits = phone.replace(/\D/g, '')
@@ -288,30 +287,6 @@ const serviceGroups = [
   },
 ]
 
-const tours = [
-  {
-    title: 'Master bedroom',
-    href: `${originalSite}/service/bedroom`,
-    number: '01',
-    image: siteAsset('service_wardrobe.jpg'),
-    panorama: siteAsset('panorama-bedroom.jpg'),
-  },
-  {
-    title: 'Modular kitchen',
-    href: `${originalSite}/service/kitchen`,
-    number: '02',
-    image: siteAsset('panorama-kitchen.jpg'),
-    panorama: siteAsset('panorama-kitchen.jpg'),
-  },
-  {
-    title: 'Living room',
-    href: `${originalSite}/service/living`,
-    number: '03',
-    image: siteAsset('tv-feature-wall.jpg'),
-    panorama: siteAsset('panorama-living.jpg'),
-  },
-]
-
 const heroSlides = [
   {
     image: siteAsset('hero-living-room.jpg'),
@@ -504,260 +479,6 @@ function FaqItem({ question, answer }) {
   )
 }
 
-function PanoramaViewer({ tour, activeIndex, onSelect }) {
-  const viewerRef = useRef(null)
-  const canvasRef = useRef(null)
-  const viewRef = useRef({ longitude: 0, latitude: 0 })
-  const autoRotateRef = useRef(true)
-  const [viewerError, setViewerError] = useState('')
-  const [isVisible, setIsVisible] = useState(false)
-  const [isPanoramaLoaded, setIsPanoramaLoaded] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: '100px' },
-    )
-    observer.observe(viewerRef.current)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const container = canvasRef.current
-
-    if (!container || !isVisible) return undefined
-
-    setIsPanoramaLoaded(false)
-    autoRotateRef.current = true
-    let renderer
-    let camera
-    let scene
-    const view = viewRef.current
-    let sphere
-    let animationFrame
-    let disposed = false
-    let resizeObserver
-    let texture
-    let dragging = false
-    const activePointers = new Map()
-    let pointerStartX = 0
-    let pointerStartY = 0
-    let startLongitude = 0
-    let startLatitude = 0
-    let pinchStartDistance = 0
-    let pinchStartFov = 75
-
-    const startViewer = async () => {
-      let THREE
-      try {
-        THREE = await import('three')
-      } catch {
-        if (!disposed) {
-          setViewerError('The 360° viewer could not be loaded. Please refresh the page and try again.')
-        }
-        return
-      }
-
-      if (disposed) return
-
-      try {
-        renderer = new THREE.WebGLRenderer({
-          antialias: true,
-          powerPreference: 'high-performance',
-        })
-      } catch {
-        const error = document.createElement('p')
-        error.className = 'panorama-error'
-        error.setAttribute('role', 'alert')
-        error.textContent = 'This browser could not start the 360° viewer. Try a browser with WebGL enabled.'
-        container.appendChild(error)
-        return
-      }
-
-      scene = new THREE.Scene()
-      camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1100)
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
-      renderer.outputColorSpace = THREE.SRGBColorSpace
-      renderer.domElement.className = 'panorama-canvas'
-      renderer.domElement.setAttribute(
-        'aria-label',
-        `${tour.title} interactive 360 degree panorama`,
-      )
-      container.appendChild(renderer.domElement)
-
-      const resize = () => {
-        const { width, height } = container.getBoundingClientRect()
-        if (!width || !height) return
-        renderer.setSize(width, height, false)
-        camera.aspect = width / height
-        camera.updateProjectionMatrix()
-      }
-
-      resizeObserver = new ResizeObserver(resize)
-      resizeObserver.observe(container)
-      resize()
-
-      texture = new THREE.TextureLoader().load(
-        tour.panorama,
-        (loadedTexture) => {
-          if (disposed) {
-            loadedTexture.dispose()
-            return
-          }
-          loadedTexture.colorSpace = THREE.SRGBColorSpace
-          loadedTexture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8)
-          loadedTexture.minFilter = THREE.LinearMipmapLinearFilter
-          loadedTexture.magFilter = THREE.LinearFilter
-          loadedTexture.needsUpdate = true
-          const geometry = new THREE.SphereGeometry(500, 96, 64)
-          geometry.scale(-1, 1, 1)
-          const material = new THREE.MeshBasicMaterial({ map: loadedTexture })
-          sphere = new THREE.Mesh(geometry, material)
-          scene.add(sphere)
-          setViewerError('')
-          setIsPanoramaLoaded(true)
-        },
-        undefined,
-        () => {
-          if (!disposed) {
-            setViewerError('The room panorama could not be loaded. Please try selecting the room again.')
-          }
-        },
-      )
-
-      const onPointerDown = (event) => {
-        activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY })
-        if (activePointers.size === 2) {
-          const [first, second] = [...activePointers.values()]
-          pinchStartDistance = Math.hypot(first.x - second.x, first.y - second.y)
-          pinchStartFov = camera.fov
-          dragging = false
-        } else {
-          dragging = true
-          pointerStartX = event.clientX
-          pointerStartY = event.clientY
-          startLongitude = view.longitude
-          startLatitude = view.latitude
-        }
-        renderer.domElement.setPointerCapture(event.pointerId)
-        autoRotateRef.current = false
-      }
-
-      const onPointerMove = (event) => {
-        if (activePointers.has(event.pointerId)) {
-          activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY })
-        }
-        if (activePointers.size === 2) {
-          const [first, second] = [...activePointers.values()]
-          const distance = Math.hypot(first.x - second.x, first.y - second.y)
-          camera.fov = Math.min(90, Math.max(40, pinchStartFov + (pinchStartDistance - distance) * 0.08))
-          camera.updateProjectionMatrix()
-          return
-        }
-        if (!dragging) return
-        view.longitude = startLongitude + (pointerStartX - event.clientX) * 0.12
-        view.latitude = Math.min(
-          80,
-          Math.max(-80, startLatitude + (event.clientY - pointerStartY) * 0.12),
-        )
-      }
-
-      const onPointerUp = (event) => {
-        activePointers.delete(event.pointerId)
-        dragging = activePointers.size === 1
-        if (dragging) {
-          const [[, pointer]] = activePointers
-          pointerStartX = pointer.x
-          pointerStartY = pointer.y
-          startLongitude = view.longitude
-          startLatitude = view.latitude
-        }
-      }
-
-      const onWheel = (event) => {
-        event.preventDefault()
-        camera.fov = Math.min(90, Math.max(40, camera.fov + Math.sign(event.deltaY) * 3))
-        camera.updateProjectionMatrix()
-      }
-
-      renderer.domElement.addEventListener('pointerdown', onPointerDown)
-      renderer.domElement.addEventListener('pointermove', onPointerMove)
-      renderer.domElement.addEventListener('pointerup', onPointerUp)
-      renderer.domElement.addEventListener('pointercancel', onPointerUp)
-      renderer.domElement.addEventListener('wheel', onWheel, { passive: false })
-
-      const animate = () => {
-        animationFrame = window.requestAnimationFrame(animate)
-        if (autoRotateRef.current && !dragging) view.longitude += 0.025
-        camera.rotation.order = 'YXZ'
-        camera.rotation.y = view.longitude * Math.PI / 180
-        camera.rotation.x = view.latitude * Math.PI / 180
-        renderer.render(scene, camera)
-      }
-
-      animate()
-    }
-
-    void startViewer()
-
-    return () => {
-      disposed = true
-      window.cancelAnimationFrame(animationFrame)
-      resizeObserver?.disconnect()
-      if (sphere) {
-        sphere.geometry.dispose()
-        sphere.material.map?.dispose()
-        sphere.material.dispose()
-      } else if (texture) {
-        texture.dispose()
-      }
-      if (renderer) {
-        renderer.dispose()
-        renderer.domElement.remove()
-      }
-    }
-  }, [isVisible, tour.panorama, tour.title])
-
-  return (
-    <div className="panorama-viewer" ref={viewerRef}>
-      <div className="panorama-viewer-heading">
-        <div>
-          <h3>{tour.title}</h3>
-          <p>{tour.detail}</p>
-        </div>
-        <p>Drag to explore · Scroll or pinch to zoom</p>
-      </div>
-      <div className={`panorama-stage${isPanoramaLoaded ? ' is-loaded' : ''}`}>
-        <img className="panorama-loading-image" src={tour.image} alt="" />
-        {!isPanoramaLoaded && !viewerError && (
-          <span className="panorama-loading-label" role="status">Loading room panorama…</span>
-        )}
-        <div className="panorama-canvas-mount" ref={canvasRef} />
-        {viewerError && <p className="panorama-error" role="alert">{viewerError}</p>}
-      </div>
-      <div className="panorama-room-picker" role="group" aria-label="Choose a room for the 360° tour">
-        {tours.map((room, index) => (
-          <button
-            aria-pressed={index === activeIndex}
-            className={`panorama-room-option${index === activeIndex ? ' is-selected' : ''}`}
-            key={room.title}
-            onClick={() => onSelect(index)}
-            type="button"
-          >
-            <img alt="" loading="lazy" src={room.image} />
-            <span>{room.title}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 function ServiceCardStack({ group }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -931,13 +652,11 @@ function ServiceCardStack({ group }) {
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
-  const [activeTourIndex, setActiveTourIndex] = useState(0)
   const [homeScope, setHomeScope] = useState('2bhk')
   const [materialTier, setMaterialTier] = useState('standard')
   const shouldReduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
 
-  const activeTour = tours[activeTourIndex]
   const selectedScope = homeScopes.find((scope) => scope.value === homeScope)
   const selectedTier = materialTiers.find((tier) => tier.value === materialTier)
   const selectedPackage = estimatePackages[materialTier]
@@ -976,7 +695,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const contentSections = document.querySelectorAll('.about-section, .tour-section')
+    const contentSections = document.querySelectorAll('.about-section')
     if (!contentSections.length || !('IntersectionObserver' in window)) return undefined
 
     const visibleSections = new Set()
@@ -1057,7 +776,6 @@ function App() {
           aria-label="Main navigation"
         >
           <a href="#about" onClick={closeMenu}>About</a>
-          <a href="#tours" onClick={closeMenu}>360° tours</a>
           <a href="#services" onClick={closeMenu}>Services</a>
           <a href="#estimate" onClick={closeMenu}>Estimate</a>
           <a href="#process" onClick={closeMenu}>Our process</a>
@@ -1126,10 +844,6 @@ function App() {
         </motion.div>
         <motion.div className="hero-visual" {...revealProps(shouldReduceMotion, { image: true })}>
           <HeroImageCarousel slides={heroSlides} shouldReduceMotion={shouldReduceMotion} />
-          <a className="hero-tour-link" href="#tours">
-            <span className="tour-play" aria-hidden="true">↗</span>
-            <span><strong>Step inside your future home</strong><small>Explore our interactive 360° tours</small></span>
-          </a>
         </motion.div>
         <a className="scroll-cue" href="#about" aria-label="Scroll to learn about Geo Interiors">
           <span>BUILT BY OUR TEAM, FROM THE FIRST MEASURE</span>
@@ -1172,27 +886,6 @@ function App() {
             <motion.article {...revealProps(shouldReduceMotion, { delay: 0.2 })}><h3>Timely handover</h3><p>A committed 30–45 day completion timeline.</p></motion.article>
           </div>
         </motion.div>
-      </section>
-
-      <section className="tour-section" id="tours">
-        <div className="section-wrap">
-          <motion.div className="section-heading" {...revealProps(shouldReduceMotion)}>
-            <div>
-              <p className="eyebrow"><span /> TAKE A CLOSER LOOK</p>
-              <h2><TypingText text="Experience the rooms in 360°." direction="left" shouldReduceMotion={shouldReduceMotion} /></h2>
-            </div>
-          </motion.div>
-          <motion.div
-            className="tour-experience"
-            {...revealProps(shouldReduceMotion, { image: true })}
-          >
-            <PanoramaViewer
-              activeIndex={activeTourIndex}
-              onSelect={setActiveTourIndex}
-              tour={activeTour}
-            />
-          </motion.div>
-        </div>
       </section>
 
       <section className="work-section section-wrap" id="services">
